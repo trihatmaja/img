@@ -33,7 +33,7 @@ RUN ./autogen.sh --disable-nls --disable-man --without-audit --without-selinux -
 
 FROM alpine:3.8 AS base
 MAINTAINER Jessica Frazelle <jess@linux.com>
-RUN apk add --no-cache git make
+RUN apk add --no-cache git make bash
 COPY --from=img /usr/bin/img /usr/bin/img
 COPY --from=idmap /usr/bin/newuidmap /usr/bin/newuidmap
 COPY --from=idmap /usr/bin/newgidmap /usr/bin/newgidmap
@@ -42,7 +42,7 @@ RUN chmod u+s /usr/bin/newuidmap /usr/bin/newgidmap \
   && mkdir -p /run/user/1000 \
   && chown -R user /run/user/1000 /home/user \
   && echo user:100000:65536 | tee /etc/subuid | tee /etc/subgid \
-  && echo "alias docker=img" > /home/user/.ashrc
+  && echo "alias docker=img" > /home/user/.profile
 # In previous version of `alpine:3.8`, the root was not locked and su-able
 # without any password when SUID bit is set on `/bin/su`.
 #
@@ -58,5 +58,5 @@ USER user
 ENV USER user
 ENV HOME /home/user
 ENV XDG_RUNTIME_DIR=/run/user/1000
-ENTRYPOINT [ "docker" ]
-CMD [ "--help" ]
+ENTRYPOINT ["docker"]
+CMD ["--help"]
