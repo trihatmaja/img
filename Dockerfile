@@ -58,5 +58,7 @@ USER user
 ENV USER user
 ENV HOME /home/user
 ENV XDG_RUNTIME_DIR=/run/user/1000
-ENTRYPOINT ["docker"]
-CMD ["--help"]
+# ENTRYPOINT ["docker"]
+# CMD ["--help"]
+
+CMD ["tail", "-f", "/dev/null"]
