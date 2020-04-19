@@ -42,7 +42,8 @@ RUN chmod u+s /usr/bin/newuidmap /usr/bin/newgidmap \
   && mkdir -p /run/user/1000 \
   && chown -R user /run/user/1000 /home/user \
   && echo user:100000:65536 | tee /etc/subuid | tee /etc/subgid \
-  && echo "#!/bin/sh\n\nalias docker=img\ndocker" > /home/user/run.sh
+  && echo "#!/bin/sh\n\nalias docker=img\ndocker" > /home/user/run.sh \
+  && chmod +x /home/user/run.sh
 # In previous version of `alpine:3.8`, the root was not locked and su-able
 # without any password when SUID bit is set on `/bin/su`.
 #
@@ -59,5 +60,5 @@ ENV USER user
 ENV HOME /home/user
 ENV XDG_RUNTIME_DIR=/run/user/1000
 
-ENTRYPOINT ["run.sh"]
+ENTRYPOINT ["/home/user/run.sh"]
 CMD ["--help"]
